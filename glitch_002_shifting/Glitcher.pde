@@ -6,12 +6,37 @@ class Glitcher {
   }
   
   Glitcher shift(int shiftAmount) {
+    image(this.img, 0, 0);
     loadPixels();
     for (int i = 0; i < width*height-shiftAmount; i++) {
       pixels[i] = pixels[i+shiftAmount];
     }
     updatePixels();
-    Glitcher g = new Glitcher(this.img.copy());
+    Glitcher g = new Glitcher(copy());
+    return g;
+  }
+  
+  Glitcher shift() {
+    image(this.img, 0, 0);
+    int randomShiftAmount = int(random(0, width));
+    loadPixels();
+    for (int i = 0; i < width*height-randomShiftAmount; i++) {
+      pixels[i] = pixels[i+randomShiftAmount];
+    }
+    updatePixels();
+    Glitcher g = new Glitcher(copy());
+    return g;
+  }
+
+  Glitcher vshift() {
+    image(this.img, 0, 0);
+    int randomShiftAmount = int(random(0, width));
+    loadPixels();
+    for (int i = 0; i < width*height - randomShiftAmount*width; i++) {
+      pixels[i] = pixels[(i+randomShiftAmount*width)];
+    }
+    updatePixels();
+    Glitcher g = new Glitcher(copy());
     return g;
   }
   
