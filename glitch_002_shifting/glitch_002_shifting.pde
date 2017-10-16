@@ -3,13 +3,15 @@
 
 // Shifting images ------------------------------------------------------------------------------------
 
+Glitcher glitch;
+
 void setup() {
   size(900, 600);
   PImage img1 = loadImage("data/plumbers.jpg");
-  Glitcher glitch = new Glitcher(img1);
-  
-  // chaining shifts
-  glitch.shift().vshift().vshift();
+
+  glitch = new Glitcher(img1);
+  glitch.shift(100).shift(100).shift(100).shift(600);
+  image(glitch, 0, 0); 
 }
 
 

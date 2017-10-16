@@ -1,43 +1,60 @@
-class Glitcher {
+class Glitcher extends PImage {
   PImage img;
+  PGraphics pg;
   
   Glitcher(PImage i) {
     this.img = i;
+    this.pg = createGraphics(this.img.width, this.img.height); 
   }
   
   Glitcher shift(int shiftAmount) {
-    image(this.img, 0, 0);
-    loadPixels();
-    for (int i = 0; i < width*height-shiftAmount; i++) {
-      pixels[i] = pixels[i+shiftAmount];
+    this.pg.beginDraw();
+    this.pg.image(this.img, 0, 0);
+    this.pg.loadPixels();
+    for (int i = 0; i < this.img.width*this.img.height; i+=this.img.width) {
+      color[] pixelsDest = new color[this.img.width];
+      arrayCopy(this.pg.pixels, i, pixelsDest, 0, this.img.width);
+      for (int w = 0; w < this.img.width; w++) {
+        if (shiftAmount < 0) {
+          int absShiftAmount = abs(shiftAmount);
+          this.pg.pixels[i+w] = pixelsDest[(w+absShiftAmount)%this.img.width];
+        } else {
+          this.pg.pixels[i+((w+shiftAmount)%this.img.width)] = pixelsDest[w]; 
+        }
+      }
     }
-    updatePixels();
-    Glitcher g = new Glitcher(copy());
-    return g;
+    this.pg.updatePixels();
+    this.img = this.pg.copy();
+    this.pg.endDraw();
+    return this;
   }
   
   Glitcher shift() {
-    image(this.img, 0, 0);
-    int randomShiftAmount = int(random(0, width));
-    loadPixels();
-    for (int i = 0; i < width*height-randomShiftAmount; i++) {
-      pixels[i] = pixels[i+randomShiftAmount];
+    this.pg.beginDraw();
+    this.pg.image(this.img, 0, 0);
+    int randomShiftAmount = int(random(0, this.img.width));
+    this.pg.loadPixels();
+    for (int i = 0; i < this.img.width*this.img.height-randomShiftAmount; i++) {
+      this.pg.pixels[i] = this.pg.pixels[i+randomShiftAmount];
     }
-    updatePixels();
-    Glitcher g = new Glitcher(copy());
-    return g;
+    this.pg.updatePixels();
+    this.img = this.pg.copy();
+    this.pg.endDraw();
+    return this;
   }
 
   Glitcher vshift() {
-    image(this.img, 0, 0);
-    int randomShiftAmount = int(random(0, width));
-    loadPixels();
-    for (int i = 0; i < width*height - randomShiftAmount*width; i++) {
-      pixels[i] = pixels[(i+randomShiftAmount*width)];
+    this.pg.beginDraw();
+    this.pg.image(this.img, 0, 0);
+    int randomShiftAmount = int(random(0, this.img.width));
+    this.pg.loadPixels();
+    for (int i = 0; i < this.img.width*this.img.height - randomShiftAmount*this.img.width; i++) {
+      this.pg.pixels[i] = this.pg.pixels[(i+randomShiftAmount*this.img.width)];
     }
-    updatePixels();
-    Glitcher g = new Glitcher(copy());
-    return g;
+    this.pg.updatePixels();
+    this.img = this.pg.copy();
+    this.pg.endDraw();
+    return this;
   }
   
   PImage pixelate() {
@@ -68,4 +85,12 @@ class Glitcher {
     return this.img; 
   }
   
+}
+
+void image(Glitcher g, float a, float b) {
+  image(g.img, a, b); 
+}
+
+void image(Glitcher g, float a, float b, float c, float d) {
+  image(g.img, a, b, c, d); 
 }
