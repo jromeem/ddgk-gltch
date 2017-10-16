@@ -5,8 +5,14 @@ class Glitcher {
     this.img = i;
   }
   
-  PImage shift() {
-    return this.img;
+  Glitcher shift(int shiftAmount) {
+    loadPixels();
+    for (int i = 0; i < width*height-shiftAmount; i++) {
+      pixels[i] = pixels[i+shiftAmount];
+    }
+    updatePixels();
+    Glitcher g = new Glitcher(this.img.copy());
+    return g;
   }
   
   PImage pixelate() {
