@@ -3,6 +3,8 @@
 
 // Shifting images ------------------------------------------------------------------------------------
 
+int theta = 1;
+int shiftAmount = 100;
 Glitcher glitch;
 
 void setup() {
@@ -10,8 +12,13 @@ void setup() {
   PImage img1 = loadImage("data/plumbers.jpg");
 
   glitch = new Glitcher(img1);
-  glitch.shift(100).shift(100).shift(100).shift(600);
-  image(glitch, 0, 0); 
+  glitch.shiftSegment(100, 200, 100);
+  glitch.shiftSegment(200, 300, 200);
+  glitch.shiftSegment(300, 400, 300);
+  glitch.shiftSegment(400, 500, 400);
+  glitch.shiftSegment(500, 600, 500);
+
+  image(glitch, 0, 0);
 }
 
 

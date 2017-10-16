@@ -7,35 +7,29 @@ class Glitcher extends PImage {
     this.pg = createGraphics(this.img.width, this.img.height); 
   }
   
-  Glitcher shift(int shiftAmount) {
+  Glitcher shift() {
+    return this.shift(int(random(width)));
+  }
+
+  Glitcher shift(float shiftAmount) {
+    return this.shiftSegment(0, this.img.height, shiftAmount);
+  }
+
+  Glitcher shiftSegment(float y1, float y2, float shiftAmount) {
     this.pg.beginDraw();
     this.pg.image(this.img, 0, 0);
     this.pg.loadPixels();
-    for (int i = 0; i < this.img.width*this.img.height; i+=this.img.width) {
+    for (int i = int(y1*this.img.width); i < int(y2*this.img.width); i+=this.img.width) {
       color[] pixelsDest = new color[this.img.width];
       arrayCopy(this.pg.pixels, i, pixelsDest, 0, this.img.width);
       for (int w = 0; w < this.img.width; w++) {
         if (shiftAmount < 0) {
-          int absShiftAmount = abs(shiftAmount);
-          this.pg.pixels[i+w] = pixelsDest[(w+absShiftAmount)%this.img.width];
+          float absShiftAmount = abs(shiftAmount);
+          this.pg.pixels[i+w] = pixelsDest[(w+int(absShiftAmount))%this.img.width];
         } else {
-          this.pg.pixels[i+((w+shiftAmount)%this.img.width)] = pixelsDest[w]; 
+          this.pg.pixels[i+((w+int(shiftAmount))%this.img.width)] = pixelsDest[w];
         }
       }
-    }
-    this.pg.updatePixels();
-    this.img = this.pg.copy();
-    this.pg.endDraw();
-    return this;
-  }
-  
-  Glitcher shift() {
-    this.pg.beginDraw();
-    this.pg.image(this.img, 0, 0);
-    int randomShiftAmount = int(random(0, this.img.width));
-    this.pg.loadPixels();
-    for (int i = 0; i < this.img.width*this.img.height-randomShiftAmount; i++) {
-      this.pg.pixels[i] = this.pg.pixels[i+randomShiftAmount];
     }
     this.pg.updatePixels();
     this.img = this.pg.copy();
