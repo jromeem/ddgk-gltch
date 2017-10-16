@@ -17,9 +17,14 @@ void setup() {
   glitch.shiftSegment(300, 400, 300);
   glitch.shiftSegment(400, 500, 400);
   glitch.shiftSegment(500, 600, 500);
-
   image(glitch, 0, 0);
 }
+
+//void draw() {
+//  float go = random(0,height-300);
+//  glitch.shiftSegment(go, go+300, random(-3,3));
+//  image(glitch, 0, 0);
+//}
 
 
 // -----------------------------------------------------------------------------------------------------

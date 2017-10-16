@@ -16,6 +16,8 @@ class Glitcher extends PImage {
   }
 
   Glitcher shiftSegment(float y1, float y2, float shiftAmount) {
+    y1 = constrain(y1, 0, this.img.height);
+    y2 = constrain (y2, 0, this.img.height);
     this.pg.beginDraw();
     this.pg.image(this.img, 0, 0);
     this.pg.loadPixels();
