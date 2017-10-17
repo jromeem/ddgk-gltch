@@ -39,13 +39,32 @@ class Glitcher extends PImage {
     return this;
   }
 
-  Glitcher vshift() {
+  Glitcher vshiftSegment(float x1, float x2, float shiftAmount) {
+    x1 = constrain(x1, 0, this.img.width);
+    x2 = constrain (x2, 0, this.img.width);
     this.pg.beginDraw();
     this.pg.image(this.img, 0, 0);
-    int randomShiftAmount = int(random(0, this.img.width));
     this.pg.loadPixels();
-    for (int i = 0; i < this.img.width*this.img.height - randomShiftAmount*this.img.width; i++) {
-      this.pg.pixels[i] = this.pg.pixels[(i+randomShiftAmount*this.img.width)];
+    for (int i = int(x1); i < x2; i++) {
+      // save a vertical slice of pixels
+      color[] pixelsDest = new color[this.img.height];
+      for (int c = 0; c < this.img.height; c++) {
+        int index = c * this.img.width + i;
+         pixelsDest[c] = this.pg.pixels[index];
+      }
+      // traversal array
+      for (int j = 0; j < this.img.height; j++) {
+        // shift down
+        if (shiftAmount >= 0) {
+          float shifter = (j+shiftAmount)%this.img.height;
+          int sindex = int(shifter) * this.img.width + i;
+          this.pg.pixels[sindex] = pixelsDest[j];
+        // shift up
+        } else {
+          float absShiftAmount = abs(shiftAmount);
+          this.pg.pixels[j*this.img.width+i] = pixelsDest[((j+int(absShiftAmount))%this.img.height)];
+        }
+      }
     }
     this.pg.updatePixels();
     this.img = this.pg.copy();
