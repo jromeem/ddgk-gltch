@@ -39,9 +39,8 @@ class Glitcher extends PImage {
     this.pg.beginDraw();
     this.pg.image(this.img, 0, 0);
     this.pg.loadPixels();
-    for (int i = y1*this.img.width; i < int(y2*this.img.width); i+=this.img.width) {
+    for (int i = y1*this.img.width; i < y2*this.img.width; i+=this.img.width) {
       color[] pixelsDest = new color[this.img.width];
-      println("y1 y2 shiftAmount: " + y1 + "  " + y2 + " " + shiftAmount);
       arrayCopy(this.pg.pixels, i, pixelsDest, 0, this.img.width);
       for (int w = 0; w < this.img.width; w++) {
         if (shiftAmount < 0) {
