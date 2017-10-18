@@ -7,6 +7,21 @@ class Glitcher extends PImage {
     this.pg = createGraphics(this.img.width, this.img.height); 
   }
   
+  // overriding method from PImage
+  void resize(int w, int h) {
+    this.pg = createGraphics(w, h);
+    this.pg.beginDraw();
+    this.img.resize(w, h);
+    this.pg.image(this.img, 0, 0);
+    this.img = this.pg.copy();
+    this.pg.endDraw(); 
+  }
+  
+  // defer PImage methods -- get PImage first then use PImage methods
+  PImage getPImage() {
+    return this.img; 
+  }
+  
   Glitcher shift() {
     return this.shift(int(random(this.img.width)));
   }
@@ -89,20 +104,16 @@ class Glitcher extends PImage {
     this.pg.image(this.img, 0, 0);
     this.pg.loadPixels();
     for (int i = x1; i < x2; i++) {
-      // save a vertical slice of pixels
       color[] pixelsDest = new color[this.img.height];
       for (int c = 0; c < this.img.height; c++) {
         int index = c * this.img.width + i;
         pixelsDest[c] = this.pg.pixels[index];
       }
-      // traversal array
       for (int j = 0; j < this.img.height; j++) {
-        // shift down
         if (shiftAmount >= 0) {
           int shifter = (j+shiftAmount)%this.img.height;
           int sindex = shifter * this.img.width + i;
           this.pg.pixels[sindex] = pixelsDest[j];
-        // shift up
         } else {
           int absShiftAmount = abs(shiftAmount);
           this.pg.pixels[j*this.img.width+i] = pixelsDest[((j+absShiftAmount)%this.img.height)];
@@ -145,6 +156,7 @@ class Glitcher extends PImage {
   
 }
 
+// overloading image() methods
 void image(Glitcher g, float a, float b) {
   image(g.img, a, b); 
 }
