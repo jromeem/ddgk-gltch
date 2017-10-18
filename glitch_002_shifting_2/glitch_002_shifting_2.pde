@@ -8,7 +8,8 @@ PImage img2;
 
 Glitcher glitch;
 
-void setup() {
+void setup()
+{
   size(900, 600);
   
   // load some images
@@ -31,7 +32,8 @@ void setup() {
 }
 
 // the draw loop
-void draw() {
+void draw()
+{
   
   // shift the same segments by the shiftAmount (10 pixels!)
   int shiftAmount = 10;

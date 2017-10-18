@@ -3,13 +3,13 @@
 
 // Loading an image ------------------------------------------------------------------------------------
 
-//void setup()
-//{
-//  size(900, 600);
-//  PImage img;
-//  img = loadImage("data/plumbers.jpg");
-//  image(img, 0, 0);
-//}
+void setup()
+{
+  size(900, 600);
+  PImage img;
+  img = loadImage("data/plumbers.jpg");
+  image(img, 0, 0);
+}
 
 // Positioning an image --------------------------------------------------------------------------------
 
