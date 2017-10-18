@@ -156,6 +156,14 @@ class Glitcher extends PImage {
   
 }
 
+// keyboard interactions
+void keyPressed() {
+  if (key == 'g' || key == 'G') {
+    clear();
+    setup();
+  }
+}
+
 // overloading image() methods
 void image(Glitcher g, float a, float b) {
   image(g.img, a, b); 
