@@ -4,15 +4,11 @@
 // Offsetting images ------------------------------------------------------------------------------------
 
 PImage img1;
-PImage img2;
 Glitcher glitch;
-int theta = 0;
-int delta = 1;
 
 void setup()
 {
   size(900, 600);
-  
   // load some images
   img1 = loadImage("data/plumbers.jpg");
 
@@ -23,7 +19,7 @@ void setup()
 void draw()
 { // begin draw loop
   
-  glitch.offset(int(random(width)),int(random(height)),100,100,100);
+  glitch.offset(int(random(width)),int(random(height)),50,50,50);
   image(glitch, 0, 0);
   
 } // end draw loop
