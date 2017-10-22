@@ -1,10 +1,18 @@
 class Glitcher extends PImage {
   PImage img;
+  PImage imgImmutable;
   PGraphics pg;
   
   Glitcher(PImage i) {
     this.img = i;
     this.pg = createGraphics(this.img.width, this.img.height); 
+   
+    // make a immutable copy
+    PGraphics pg2 = createGraphics(this.img.width, this.img.height);
+    pg2.beginDraw();
+    pg2.image(this.img, 0, 0);
+    this.imgImmutable = pg2.copy();
+    pg2.endDraw();
   }
   
   // overriding method from PImage
@@ -174,8 +182,21 @@ class Glitcher extends PImage {
     return this;
   }
   
-  PImage offset() {
-    return this.img;
+  PImage offset(int x, int y, int w, int h, int randAmount) {
+    PGraphics pgg = createGraphics(this.img.width, this.img.height);
+    pgg.beginDraw();
+    pgg.image(this.img, 0, 0);
+    int rAmount = int(random(-randAmount, randAmount));
+    pgg.copy(this.imgImmutable,x,y,w,h,x+rAmount,y+rAmount,w,h);
+    this.img = pgg.copy();
+    pgg.endDraw();
+    
+    this.pg = pgg;
+    this.pg.beginDraw();
+    this.pg.image(this.img, 0, 0);
+    this.pg.endDraw();
+    
+    return this;
   }
   
   PImage stretch() {
