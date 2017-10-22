@@ -6,8 +6,8 @@
 PImage img1;
 PImage img2;
 Glitcher glitch;
-float theta = 0;
-float delta = 1;
+int theta = 0;
+int delta = 1;
 
 void setup()
 {
@@ -33,7 +33,8 @@ void draw()
   //}
 
   // pixelate the image
-  glitch.pixelate(theta);
+  //glitch.pixelate(theta);
+  glitch.pixelate(100, 100, 400, 400, theta);
   
   // draw image
   image(glitch, 0, 0);
