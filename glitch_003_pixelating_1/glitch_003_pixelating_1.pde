@@ -1,12 +1,13 @@
 // dadageek: Generative Collage and Glitch Art with Processing
-// Glitch & Media: Shifting
+// Glitch & Media: Pixelating
 
-// Shifting images ------------------------------------------------------------------------------------
+// Pixelating images ------------------------------------------------------------------------------------
 
 PImage img1;
 PImage img2;
-
 Glitcher glitch;
+float theta = 0;
+float delta = 1;
 
 void setup()
 {
@@ -18,14 +19,24 @@ void setup()
 
   // load plumbers image into a Glitcher object
   glitch = new Glitcher(img1);
-  
-  // initially shift a few segments vertically in the image
-  glitch.pixelate(0, 0, 0, 0);
 }
 
-// the draw loop
 void draw()
 { // begin draw loop
+
+  // increase pixelation by the delta amount
+  theta+=delta;
+
+  // reverse the delta when theta reaches a certain amount
+  //if (theta > 50) {
+  //  delta*=-1; 
+  //}
+
+  // pixelate the image
+  glitch.pixelate(theta);
+  
+  // draw image
+  image(glitch, 0, 0);
   
 } // end draw loop
 

@@ -126,8 +126,48 @@ class Glitcher extends PImage {
     return this;
   }
   
-  PImage pixelate() {
-    return this.img;
+  PImage pixelate(float pixelAmount) {
+    return this.pixelate(int(pixelAmount)); 
+  }
+  
+  PImage pixelate(int pixelAmount) {
+    this.pg.beginDraw();
+    this.pg.image(this.img, 0, 0);
+    if (pixelAmount <= 0) {
+      this.img = this.pg.copy();
+      return this;
+    }
+    this.pg.loadPixels();    
+    for (int j = 0; j < this.pg.pixels.length; j+=this.img.width*pixelAmount) {
+      for (int i = 0; i < this.img.width; i+=pixelAmount) {
+        // find pixel average
+        int collectionTotal = int(pixelAmount*pixelAmount);
+        float totalR, totalG, totalB;
+        totalR = totalG = totalB = 0;
+        for (int m = 0; m < pixelAmount*this.img.width; m+=this.img.width) {
+          for (int p = 0; p < pixelAmount; p++) {
+            color c = this.pg.pixels[min(p+m + i+j, this.pg.pixels.length-1)];
+            totalR += red(c);
+            totalG += green(c);
+            totalB += blue(c);
+          }
+        }
+        float thisR = totalR / collectionTotal;
+        float thisG = totalG / collectionTotal;
+        float thisB = totalB / collectionTotal;
+        color newColor = color(thisR, thisG, thisB);
+        this.pg.fill(newColor);
+        this.pg.noStroke();
+        
+        // draw new pixel rect
+        int px = (i+j)%this.img.width;
+        int py = j/this.img.width;
+        this.pg.rect(px, py, pixelAmount, pixelAmount);
+      }
+    }
+    this.img = this.pg.copy();
+    this.pg.endDraw();
+    return this;
   }
   
   PImage offset() {
@@ -153,7 +193,6 @@ class Glitcher extends PImage {
   PImage pixel_sort() {
     return this.img; 
   }
-  
 }
 
 // keyboard interactions
