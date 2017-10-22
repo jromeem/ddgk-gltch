@@ -20,14 +20,39 @@ void setup()
   glitch = new Glitcher(img1);
   
   // initially shift a few segments vertically in the image
-  glitch.pixelate(0, 0, 0, 0);
+  glitch.vshiftSegment(000, 100, 100);
+  glitch.vshiftSegment(100, 200, 200);
+  glitch.vshiftSegment(200, 300, 300);
+  glitch.vshiftSegment(300, 400, 400);
+  glitch.vshiftSegment(400, 500, 500);
+  glitch.vshiftSegment(500, 600, 600);
+  glitch.vshiftSegment(600, 700, 700);
+  glitch.vshiftSegment(700, 800, 800);
+  glitch.vshiftSegment(800, 900, 900);
 }
 
 // the draw loop
 void draw()
-{ // begin draw loop
+{
   
-} // end draw loop
+  // shift the same segments by the shiftAmount (10 pixels!)
+  int shiftAmount = 10;
+  glitch.vshiftSegment(000, 100, shiftAmount);
+  glitch.vshiftSegment(100, 200, shiftAmount);
+  glitch.vshiftSegment(200, 300, shiftAmount);
+  glitch.vshiftSegment(300, 400, shiftAmount);
+  glitch.vshiftSegment(400, 500, shiftAmount);
+  glitch.vshiftSegment(500, 600, shiftAmount);
+  glitch.vshiftSegment(600, 700, shiftAmount);
+  glitch.vshiftSegment(700, 800, shiftAmount);
+  glitch.vshiftSegment(800, 900, shiftAmount);
+  
+  // display the resulting glitched image
+  image(glitch, 0, 0);
+  
+  // display img2 (not a glitched image!)
+  image(img2, 0, 0);
+}
 
 // -----------------------------------------------------------------------------------------------------
 
