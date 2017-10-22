@@ -130,6 +130,10 @@ class Glitcher extends PImage {
     return this.pixelate(0, 0, this.img.width, this.img.height, int(pixelAmount)); 
   }
   
+  //PImage pixelate(float xOffset, float yOffset, float w, float h, float pixelAmount) {
+  //  return this.pixelate(int(xOffset), int(yOffset), int(w), int(h), int(pixelAmount)); 
+  //}
+  
   PImage pixelate(int xOffset, int yOffset, int w, int h, int pixelAmount) {
     this.pg.beginDraw();
     this.pg.image(this.img, 0, 0);
@@ -162,10 +166,7 @@ class Glitcher extends PImage {
         // draw new pixel rect
         int px = (i+j)%this.img.width;
         int py = j/this.img.width;
-        this.pg.rectMode(CORNERS);
-        int px2 = min(w, max(px+pixelAmount, xOffset+w));
-        int py2 = min(h, max(py+pixelAmount, yOffset+h));
-        this.pg.rect(px, py, px2, py2);
+        this.pg.rect(px, py, pixelAmount, pixelAmount);
       }
     }
     this.img = this.pg.copy();

@@ -28,13 +28,12 @@ void draw()
   theta+=delta;
 
   // reverse the delta when theta reaches a certain amount
-  //if (theta > 50) {
-  //  delta*=-1; 
-  //}
+  if (theta > 30) {
+    delta*=-1; 
+  }
 
-  // pixelate the image
-  //glitch.pixelate(theta);
-  glitch.pixelate(100, 100, 400, 400, theta);
+   //pixelate the image
+  glitch.pixelate(theta);
   
   // draw image
   image(glitch, 0, 0);
