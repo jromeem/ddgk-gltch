@@ -138,9 +138,9 @@ class Glitcher extends PImage {
     return this.pixelate(0, 0, this.img.width, this.img.height, int(pixelAmount)); 
   }
   
-  //PImage pixelate(float xOffset, float yOffset, float w, float h, float pixelAmount) {
-  //  return this.pixelate(int(xOffset), int(yOffset), int(w), int(h), int(pixelAmount)); 
-  //}
+  PImage pixelate(float xOffset, float yOffset, float w, float h, float pixelAmount) {
+   return this.pixelate(int(xOffset), int(yOffset), int(w), int(h), int(pixelAmount)); 
+  }
   
   PImage pixelate(int xOffset, int yOffset, int w, int h, int pixelAmount) {
     this.pg.beginDraw();
@@ -150,8 +150,8 @@ class Glitcher extends PImage {
       return this;
     }
     this.pg.loadPixels();    
-    for (int j = 0+yOffset*this.img.width; j < this.img.width*h; j+=this.img.width*pixelAmount) {
-      for (int i = 0+xOffset; i < w; i+=pixelAmount) {
+    for (int j = 0; j < this.img.width*h; j+=this.img.width*pixelAmount) {
+      for (int i = 0; i < w; i+=pixelAmount) {
         // find pixel average
         int collectionTotal = int(pixelAmount*pixelAmount);
         float totalR, totalG, totalB;
@@ -172,8 +172,8 @@ class Glitcher extends PImage {
         this.pg.noStroke();
         
         // draw new pixel rect
-        int px = (i+j)%this.img.width;
-        int py = j/this.img.width;
+        int px = (i+j)%this.img.width + xOffset;
+        int py = j/this.img.width + yOffset;
         this.pg.rect(px, py, pixelAmount, pixelAmount);
       }
     }

@@ -33,7 +33,7 @@ void draw()
   }
 
    //pixelate the image
-  glitch.pixelate(theta);
+  glitch.pixelate(50, 50, 10, 200, 10);
   
   // draw image
   image(glitch, 0, 0);
