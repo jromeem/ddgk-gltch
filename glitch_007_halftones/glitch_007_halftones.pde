@@ -11,31 +11,22 @@ float cstep = 10;
 void setup()
 {
   size(900, 600);
-  // load an image
+  // load some images
   img1 = loadImage("data/plumbers.jpg");
+
   // load plumbers image into a Grapher object
   graph = new Grapher(img1);
-  // load plumbers image into a Glitcher object
-  glitch = new Glitcher(img1);
+
+  color cc = color(255, 255, 255);
+  graph.halftone(5, cc);
+
+  image(img1, 0, 0);
+  image(graph, 0, 0);
 }
 
 void draw()
 { // begin draw loop
 
-  cstep+=0.1;
-  stroke(255, 255, 255);
-  color yellowColor = color(0, 0, 255);
-  color blueColor = color(0, 255, 255);
-
-  graph = new Grapher(img1);
-  graph.drawRows(cstep, yellowColor);
-  graph.drawColumns(cstep, blueColor);
-  // glitch.vshiftSegment(random(0, width), random(0, width), 20);
-
-  image(glitch, 0, 0);
-  image(graph, 0, 0);
-  // image(graph, 100, 100, 700, 400);
-  
 } // end draw loop
 
 // -----------------------------------------------------------------------------------------------------
