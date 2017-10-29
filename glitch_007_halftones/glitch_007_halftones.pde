@@ -1,5 +1,5 @@
 // dadageek: Generative Collage and Glitch Art with Processing
-// Glitch w/ Shapes Context and Structire: The Grid
+// Glitch w/ Shapes Context and Structure: The Grid
 
 // Offsetting images ------------------------------------------------------------------------------------
 

@@ -62,7 +62,6 @@ class Grapher extends PImage {
         float yLoc = i / this.img.width;
         this.pg.ellipse(xLoc, yLoc, ellispeSize, ellispeSize);
       }
-      stepOffset*=-1;
     }
 
     this.pg.endDraw();

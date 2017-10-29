@@ -215,8 +215,303 @@ class Glitcher extends PImage {
     return this.img; 
   }
   
-  PImage pixel_sort() {
-    return this.img; 
+  PImage pixelSort(int mode, int blackValue, int brightnessValue, int whiteValue) {
+    PixelSort p = new PixelSort(this.img, mode, blackValue, brightnessValue, whiteValue);
+    this.pg.beginDraw();
+    this.pg.image(p.ps_draw(), 0, 0);
+    this.pg.endDraw();
+    return this; 
+  }
+}
+
+class PixelSort {
+  /*
+   ASDF Pixel Sort
+   Kim Asendorf | 2010 | kimasendorf.com
+   Sorting modes:
+   0 = black
+   1 = brightness
+   2 = white
+  */
+  int mode = 1;
+  int loops = 1;
+
+  // threshold values to determine sorting start and end pixels
+  int blackValue = -16000000;
+  int brightnessValue = 60;
+  int whiteValue = -13000000;
+
+  int row = 0;
+  int column = 0;
+
+  boolean saved = false;
+  boolean columnDone = false;
+  boolean rowDone = false;
+
+  PImage _img;
+  PGraphics pgg;
+  PImage imgImmutable;
+
+  PixelSort(PImage psImg, int mode, int blackValue, int brightnessValue, int whiteValue) {
+    this._img = psImg;
+    this.mode = mode;
+    this.blackValue = blackValue;
+    this.brightnessValue = brightnessValue;
+    this.whiteValue = whiteValue;
+    this.pgg = createGraphics(_img.width, _img.height);
+        // make a immutable copy
+    PGraphics pg2 = createGraphics(this._img.width, this._img.height);
+    pg2.beginDraw();
+    pg2.image(this._img, 0, 0);
+    this.imgImmutable = pg2.copy();
+    pg2.endDraw();
+  }
+
+  PGraphics ps_draw() {
+    // loop through columns
+    pgg.beginDraw();
+    while(column < _img.width-1) {
+      _img.loadPixels(); 
+      sortColumn();
+      column++;
+      _img.updatePixels();
+    }
+    // loop through rows
+    while(row < _img.height-1) {
+      _img.loadPixels(); 
+      sortRow();
+      row++;
+      _img.updatePixels();
+    }
+    // load updated image onto surface and scale to fit the display width,height
+    pgg.image(_img, 0, 0, width, height);
+    if (column >= _img.width-1) {
+      columnDone = true;
+    }
+    if (row >= _img.height-1) {
+      rowDone = true;
+    }
+    if (columnDone && rowDone) {
+      column = 0;
+      row = 0;
+      columnDone = false;
+      rowDone = false;
+    }
+    _img = imgImmutable;
+
+    pgg.endDraw();
+    return pgg;
+  }
+
+  void sortRow() {
+    // current row
+    int y = row;
+    // where to start sorting
+    int x = 0;
+    // where to stop sorting
+    int xend = 0;
+    while(xend < _img.width-1) {
+      switch(mode) {
+        case 0:
+          x = getFirstNotBlackX(x, y);
+          xend = getNextBlackX(x, y);
+          break;
+        case 1:
+          x = getFirstBrightX(x, y);
+          xend = getNextDarkX(x, y);
+          break;
+        case 2:
+          x = getFirstNotWhiteX(x, y);
+          xend = getNextWhiteX(x, y);
+          break;
+        default:
+          break;
+      }
+      if(x < 0) break;
+      int sortLength = xend-x;
+      color[] unsorted = new color[sortLength];
+      color[] sorted = new color[sortLength];
+      for(int i=0; i<sortLength; i++) {
+        unsorted[i] = _img.pixels[x + i + y * _img.width];
+      }
+      sorted = sort(unsorted);
+      for(int i=0; i<sortLength; i++) {
+        _img.pixels[x + i + y * _img.width] = sorted[i];      
+      }
+      x = xend+1;
+    }
+  }
+
+  void sortColumn() {
+    // current column
+    int x = column;
+    // where to start sorting
+    int y = 0;
+    // where to stop sorting
+    int yend = 0;
+    while(yend < _img.height-1) {
+      switch(mode) {
+        case 0:
+          y = getFirstNotBlackY(x, y);
+          yend = getNextBlackY(x, y);
+          break;
+        case 1:
+          y = getFirstBrightY(x, y);
+          yend = getNextDarkY(x, y);
+          break;
+        case 2:
+          y = getFirstNotWhiteY(x, y);
+          yend = getNextWhiteY(x, y);
+          break;
+        default:
+          break;
+      }
+      if(y < 0) break;
+      int sortLength = yend-y;
+      color[] unsorted = new color[sortLength];
+      color[] sorted = new color[sortLength];
+      for(int i=0; i<sortLength; i++) {
+        unsorted[i] = _img.pixels[x + (y+i) * _img.width];
+      }
+      sorted = sort(unsorted);
+      for(int i=0; i<sortLength; i++) {
+        _img.pixels[x + (y+i) * _img.width] = sorted[i];
+      }
+      y = yend+1;
+    }
+  }
+
+
+  // black x
+  int getFirstNotBlackX(int x, int y) {
+    while(_img.pixels[x + y * _img.width] < blackValue) {
+      x++;
+      if(x >= _img.width) 
+        return -1;
+    }
+    return x;
+  }
+
+  int getNextBlackX(int x, int y) {
+    x++;
+    while(_img.pixels[x + y * _img.width] > blackValue) {
+      x++;
+      if(x >= _img.width) 
+        return _img.width-1;
+    }
+    return x-1;
+  }
+
+  // brightness x
+  int getFirstBrightX(int x, int y) {
+    while(brightness(_img.pixels[x + y * _img.width]) < brightnessValue) {
+      x++;
+      if(x >= _img.width)
+        return -1;
+    }
+    return x;
+  }
+
+  int getNextDarkX(int _x, int _y) {
+    int x = _x+1;
+    int y = _y;
+    while(brightness(_img.pixels[x + y * _img.width]) > brightnessValue) {
+      x++;
+      if(x >= _img.width) return _img.width-1;
+    }
+    return x-1;
+  }
+
+  // white x
+  int getFirstNotWhiteX(int x, int y) {
+    while(_img.pixels[x + y * _img.width] > whiteValue) {
+      x++;
+      if(x >= _img.width) 
+        return -1;
+    }
+    return x;
+  }
+
+  int getNextWhiteX(int x, int y) {
+    x++;
+    while(_img.pixels[x + y * _img.width] < whiteValue) {
+      x++;
+      if(x >= _img.width) 
+        return _img.width-1;
+    }
+    return x-1;
+  }
+
+  // black y
+  int getFirstNotBlackY(int x, int y) {
+    if(y < _img.height) {
+      while(_img.pixels[x + y * _img.width] < blackValue) {
+        y++;
+        if(y >= _img.height)
+          return -1;
+      }
+    }
+    return y;
+  }
+
+  int getNextBlackY(int x, int y) {
+    y++;
+    if(y < _img.height) {
+      while(_img.pixels[x + y * _img.width] > blackValue) {
+        y++;
+        if(y >= _img.height)
+          return _img.height-1;
+      }
+    }
+    return y-1;
+  }
+
+  // brightness y
+  int getFirstBrightY(int x, int y) {
+    if(y < _img.height) {
+      while(brightness(_img.pixels[x + y * _img.width]) < brightnessValue) {
+        y++;
+        if(y >= _img.height)
+          return -1;
+      }
+    }
+    return y;
+  }
+
+  int getNextDarkY(int x, int y) {
+    y++;
+    if(y < _img.height) {
+      while(brightness(_img.pixels[x + y * _img.width]) > brightnessValue) {
+        y++;
+        if(y >= _img.height)
+          return _img.height-1;
+      }
+    }
+    return y-1;
+  }
+
+  // white y
+  int getFirstNotWhiteY(int x, int y) {
+    if(y < _img.height) {
+      while(_img.pixels[x + y * _img.width] > whiteValue) {
+        y++;
+        if(y >= _img.height)
+          return -1;
+      }
+    } 
+    return y;
+  }
+
+  int getNextWhiteY(int x, int y) {
+    y++;
+    if(y < _img.height) {
+      while(_img.pixels[x + y * _img.width] < whiteValue) {
+        y++;
+        if(y >= _img.height) 
+          return _img.height-1;
+      }
+    }
+    return y-1;
   }
 }
 
