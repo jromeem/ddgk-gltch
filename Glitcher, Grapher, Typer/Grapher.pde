@@ -53,7 +53,6 @@ class Grapher extends PImage {
     this.pg.beginDraw();
     this.pg.noStroke();
     this.pg.fill(cc);
-    int stepOffset = 1;
     float offset = stepSize;
     for (int i = 0; i < this.img.width*this.img.height; i+=this.img.width*(offset*1.5)) {
       for (int j = 0; j < this.img.width; j+=offset) {
