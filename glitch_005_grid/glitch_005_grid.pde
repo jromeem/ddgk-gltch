@@ -1,7 +1,7 @@
 // dadageek: Generative Collage and Glitch Art with Processing
 // Glitch w/ Shapes Context and Structire: The Grid
 
-// Offsetting images ------------------------------------------------------------------------------------
+// Using the grid ------------------------------------------------------------------------------------
 
 PImage img1;
 Glitcher glitch;
@@ -23,18 +23,16 @@ void draw()
 { // begin draw loop
 
   cstep+=0.1;
-  stroke(255, 255, 255);
-  color yellowColor = color(0, 0, 255);
+  color yellowColor = color(255, 255, 0);
   color blueColor = color(0, 255, 255);
 
   graph = new Grapher(img1);
   graph.drawRows(cstep, yellowColor);
   graph.drawColumns(cstep, blueColor);
-  // glitch.vshiftSegment(random(0, width), random(0, width), 20);
+  glitch.vshiftSegment(random(0, width), random(0, width), 20);
 
   image(glitch, 0, 0);
-  image(graph, 0, 0);
-  // image(graph, 100, 100, 700, 400);
+  image(graph, 100, 100, 700, 400);
   
 } // end draw loop
 

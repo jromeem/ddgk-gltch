@@ -1,12 +1,11 @@
 // dadageek: Generative Collage and Glitch Art with Processing
-// Glitch w/ Shapes Context and Structure: The Grid
+// Glitch w/ Shapes Context and Structure: Halftones
 
-// Offsetting images ------------------------------------------------------------------------------------
+// Halftoning images ------------------------------------------------------------------------------------
 
 PImage img1;
 Glitcher glitch;
 Grapher graph;
-float cstep = 10;
 
 void setup()
 {

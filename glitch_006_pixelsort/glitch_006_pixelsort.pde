@@ -4,11 +4,15 @@
 // Pixel sorting images ------------------------------------------------------------------------------------
 
 // set the mode
+// mode 0 - blackness
+// mode 1 - brightness
+// mode 2 - whiteness
 int mode = 1;
+
 // threshold values to determine sorting start and end pixels
-int blackValue = -16000000;
-int brightnessValue = 60;
-int whiteValue = -13000000;
+int blackValue = -16000000; // mode 0 (-16000000 - 0)
+int brightnessValue = 60;   // mode 1 (0 - 255)
+int whiteValue = -13000000; // mode 2 (-16000000 - 0)
 
 Glitcher glitch;
 
@@ -23,6 +27,7 @@ void setup() {
 }
 
 void draw() {
+
   // load an image
   img = loadImage("data/tokyo.png");
   
@@ -33,6 +38,7 @@ void draw() {
 
   // create a new Glitcher
   glitch = new Glitcher(img);
+
   // make a new pixel sort glitch based on the mouseX positions
   glitch.pixelSort(mode, blackValue, brightnessValue, whiteValue);
   
