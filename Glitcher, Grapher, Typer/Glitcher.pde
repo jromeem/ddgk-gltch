@@ -215,8 +215,8 @@ class Glitcher extends PImage {
     return this.img; 
   }
   
-  PImage pixelSort(int mode, int blackValue, int brightnessValue, int whiteValue) {
-    PixelSort p = new PixelSort(this.img, mode, blackValue, brightnessValue, whiteValue);
+  PImage pixelSort(int mode, float threshold) {
+    PixelSort p = new PixelSort(this.img, mode, threshold);
     this.pg.beginDraw();
     this.pg.image(p.ps_draw(), 0, 0);
     this.pg.endDraw();
@@ -234,12 +234,14 @@ class PixelSort {
    2 = white
   */
   int mode = 1;
+  float thresholdValue;
+  
   int loops = 1;
 
   // threshold values to determine sorting start and end pixels
-  int blackValue = -16000000;
-  int brightnessValue = 60;
-  int whiteValue = -13000000;
+  float blackValue = -16000000;
+  float brightnessValue = 60;
+  float whiteValue = -13000000;
 
   int row = 0;
   int column = 0;
@@ -252,12 +254,27 @@ class PixelSort {
   PGraphics pgg;
   PImage imgImmutable;
 
-  PixelSort(PImage psImg, int mode, int blackValue, int brightnessValue, int whiteValue) {
+  PixelSort(PImage psImg, int mode, float thresholdValue) {
     this._img = psImg;
     this.mode = mode;
-    this.blackValue = blackValue;
-    this.brightnessValue = brightnessValue;
-    this.whiteValue = whiteValue;
+    
+    // map the values based on the mode
+    if (this.mode == 0) {
+      this.thresholdValue = map(thresholdValue, 0, 1000, 0, -16000000);
+    } else if (this.mode == 1) {
+      this.thresholdValue = map(thresholdValue, 0, 1000, 255, 0);
+    } else if (this.mode == 2) {
+      this.thresholdValue = map(thresholdValue, 0, 1000, -16000000, 0);
+    } else {
+      this.mode = 0;
+      this.thresholdValue = 1000;
+    }
+
+    // set the values to the threshold value
+    this.blackValue = this.thresholdValue;
+    this.brightnessValue = this.thresholdValue;
+    this.whiteValue = this.thresholdValue;
+
     this.pgg = createGraphics(_img.width, _img.height);
         // make a immutable copy
     PGraphics pg2 = createGraphics(this._img.width, this._img.height);

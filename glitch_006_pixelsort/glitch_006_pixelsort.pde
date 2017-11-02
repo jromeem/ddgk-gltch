@@ -10,9 +10,7 @@
 int mode = 1;
 
 // threshold values to determine sorting start and end pixels
-int blackValue = -16000000; // mode 0 (-16000000 - 0)
-int brightnessValue = 60;   // mode 1 (0 - 255)
-int whiteValue = -13000000; // mode 2 (-16000000 - 0)
+float thresholdValue = 500; // between 0 - 1000
 
 Glitcher glitch;
 
@@ -32,15 +30,13 @@ void draw() {
   img = loadImage("data/tokyo.png");
   
   // map the values to the mouseX
-  blackValue = int(map(mouseX, 0, width - 1, -16777216, 0));
-  brightnessValue = int(map(mouseX, 0, width - 1, 0, 255));
-  whiteValue = int(map(mouseX, 0, width - 1, -16777216, 0));
+  float threshold = int(map(mouseX, 0, width-1, 0, 1000));
 
   // create a new Glitcher
   glitch = new Glitcher(img);
 
   // make a new pixel sort glitch based on the mouseX positions
-  glitch.pixelSort(mode, blackValue, brightnessValue, whiteValue);
+  glitch.pixelSort(2, threshold);
   
   // display the glitch
   image(glitch, 0, 0);
