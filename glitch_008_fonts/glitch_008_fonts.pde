@@ -11,7 +11,7 @@ void setup()
   for (int i=0; i<fontList.length; i++) {
     output.println("["+i+"] "+ fontList[i]); 
   }
-  output.flush();  // Writes the remaining data to the file
-  output.close();  // Finishes the file
-  exit();  // Stops the program
+  output.flush();
+  output.close();
+  exit();
 }
