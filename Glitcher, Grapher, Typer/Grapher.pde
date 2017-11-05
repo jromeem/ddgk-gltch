@@ -17,18 +17,14 @@ class Grapher extends PImage {
 
   Grapher(Glitcher g) {
     this.img = g.img;
-    this.pg = createGraphics(this.img.width, this.img.height); 
-   
+    this.pg = createGraphics(this.img.width, this.img.height);
+
     // make a immutable copy
     PGraphics pg2 = createGraphics(this.img.width, this.img.height);
     pg2.beginDraw();
     pg2.image(this.img, 0, 0);
     this.imgImmutable = pg2.copy();
     pg2.endDraw();
-  }
-
-  void repeatImage() {
-
   }
 
   Grapher drawGrid(float stepSize, color c) {

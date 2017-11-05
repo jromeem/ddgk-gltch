@@ -5,6 +5,18 @@ class Glitcher extends PImage {
   
   Glitcher(PImage i) {
     this.img = i;
+    this.pg = createGraphics(this.img.width, this.img.height);
+
+    // make a immutable copy
+    PGraphics pg2 = createGraphics(this.img.width, this.img.height);
+    pg2.beginDraw();
+    pg2.image(this.img, 0, 0);
+    this.imgImmutable = pg2.copy();
+    pg2.endDraw();
+  }
+
+  Glitcher(Grapher g) {
+    this.img = g.img;
     this.pg = createGraphics(this.img.width, this.img.height); 
    
     // make a immutable copy
@@ -537,6 +549,9 @@ void keyPressed() {
   if (key == 'g' || key == 'G') {
     clear();
     setup();
+  }
+  if (key == ' ') {
+    saveFrame("GLITCH-####.png");
   }
 }
 

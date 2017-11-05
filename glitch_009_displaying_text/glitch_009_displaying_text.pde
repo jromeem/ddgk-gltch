@@ -48,8 +48,10 @@ void setup()
 
 void draw()
 {
+  // do some glitches first
   glitch.shiftSegment(240, 285, 3);
   glitch.shiftSegment(415, 540, -3);
+  glitch.shiftSegment(615, 640, 2);
   glitch.vshiftSegment(0, width, 2);
   
   // start a grapher using the glitch as the image
