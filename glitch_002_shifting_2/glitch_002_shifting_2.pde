@@ -34,9 +34,9 @@ void setup()
 // the draw loop
 void draw()
 {
-  
-  // shift the same segments by the shiftAmount (10 pixels!)
+  // shift the same segments by the same shiftAmount (10 pixels!)
   int shiftAmount = 10;
+  
   glitch.vshiftSegment(000, 100, shiftAmount);
   glitch.vshiftSegment(100, 200, shiftAmount);
   glitch.vshiftSegment(200, 300, shiftAmount);
