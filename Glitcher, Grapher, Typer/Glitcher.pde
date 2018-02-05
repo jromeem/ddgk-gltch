@@ -236,9 +236,46 @@ class Glitcher extends PImage {
   }
 
   PImage redChannelShift(int amount) {
-    ChannelShift cs = new ChannelShift(this.img, false, true, 2, 2, amount, amount);
+    ChannelShift cs = new ChannelShift(this.img, 0, 0, 0, amount);
     this.pg.beginDraw();
-    cs.display();
+    this.pg.image(cs.display(), 0, 0);
+    this.pg.endDraw();
+    return this;
+  }
+  PImage redChannelVShift(int amount) {
+    ChannelShift cs = new ChannelShift(this.img, 0, 0, amount, 0);
+    this.pg.beginDraw();
+    this.pg.image(cs.display(), 0, 0);
+    this.pg.endDraw();
+    return this;
+  }
+
+  PImage greenChannelShift(int amount) {
+    ChannelShift cs = new ChannelShift(this.img, 1, 1, 0, amount);
+    this.pg.beginDraw();
+    this.pg.image(cs.display(), 0, 0);
+    this.pg.endDraw();
+    return this;
+  }
+  PImage greenChannelVShift(int amount) {
+    ChannelShift cs = new ChannelShift(this.img, 1, 1, amount, 0);
+    this.pg.beginDraw();
+    this.pg.image(cs.display(), 0, 0);
+    this.pg.endDraw();
+    return this;
+  }
+
+  PImage blueChannelShift(int amount) {
+    ChannelShift cs = new ChannelShift(this.img, 1, 1, 0, amount);
+    this.pg.beginDraw();
+    this.pg.image(cs.display(), 0, 0);
+    this.pg.endDraw();
+    return this;
+  }
+  PImage blueChannelVShift(int amount) {
+    ChannelShift cs = new ChannelShift(this.img, 1, 1, amount, 0);
+    this.pg.beginDraw();
+    this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
     return this;
   }
@@ -251,29 +288,45 @@ class ChannelShift {
   */
   PImage sourceImg;
   PImage targetImg;
-  boolean glitchComplete = false;
-  boolean shiftVertically = false;
-  boolean shiftHorizontally = false;
-  int sourceChannel = 0;
-  int targetChannel = 0;
-  int verticalShift = 0;
-  int horizontalShift = 0;
 
-  ChannelShift (PImage csImage, boolean shiftVert, boolean shiftHori, int sChannel, int tChannel, int shiftVertAmount, int shiftHoriAmount) {
-    this.sourceImg = csImage;
-    this.targetImg = csImage;
+  PImage _img;
+  PGraphics pgg;
+  PImage imgImmutable;
+
+  boolean shiftVertically;
+  boolean shiftHorizontally;
+
+  int sourceChannel;
+  int targetChannel;
+  int verticalShift;
+  int horizontalShift;
+
+  ChannelShift (PImage csImage, int sChannel, int tChannel, int shiftVertAmount, int shiftHoriAmount) {
+    this._img = csImage;
+
+    this.pgg = createGraphics(this._img.width, this._img.height);
+    // make a immutable copy
+    PGraphics pg2 = createGraphics(this._img.width, this._img.height);
+    pg2.beginDraw();
+    pg2.image(this._img, 0, 0);
+    this.imgImmutable = pg2.copy();
+    pg2.endDraw();
+
+    this.sourceImg = this._img;
+    this.targetImg = this._img;
+
     this.sourceImg.loadPixels();
     this.targetImg.loadPixels();
-    this.glitchComplete = false;
-    this.shiftVertically = shiftVert;
-    this.shiftHorizontally = shiftHori;
+
     this.sourceChannel = constrain(sChannel, 0, 2);
     this.targetChannel = constrain(tChannel, 0, 2);
+    
     this.verticalShift = shiftVertAmount;
     this.horizontalShift = shiftHoriAmount;
   }
 
   PImage display() {
+    this.pgg.beginDraw();
     // load pixels
     this.sourceImg.loadPixels();
     this.targetImg.loadPixels();
@@ -281,8 +334,10 @@ class ChannelShift {
     copyChannel(this.sourceImg.pixels, this.targetImg.pixels, this.verticalShift, this.horizontalShift, this.sourceChannel, this.targetChannel);
     // update the target pixels
     this.targetImg.updatePixels();
+    this.pgg.image(this.targetImg, 0, 0);
     // load updated image onto surface
-    return targetImg;
+    this.pgg.endDraw();
+    return this.pgg;
   }
 
   void copyChannel(color[] sourcePixels, color[] targetPixels, int sourceY, int sourceX, int sourceChannel, int targetChannel)
@@ -418,7 +473,7 @@ class PixelSort {
     this.whiteValue = this.thresholdValue;
 
     this.pgg = createGraphics(_img.width, _img.height);
-        // make a immutable copy
+    // make a immutable copy
     PGraphics pg2 = createGraphics(this._img.width, this._img.height);
     pg2.beginDraw();
     pg2.image(this._img, 0, 0);
