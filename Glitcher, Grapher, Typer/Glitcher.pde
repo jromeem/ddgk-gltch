@@ -146,6 +146,10 @@ class Glitcher extends PImage {
     return this;
   }
   
+  PImage pixelate() {
+    return this.pixelate(0, 0, this.img.width, this.img.height, int(random(10, 80)));
+  }
+
   PImage pixelate(float pixelAmount) {
     return this.pixelate(0, 0, this.img.width, this.img.height, int(pixelAmount)); 
   }
@@ -232,16 +236,8 @@ class Glitcher extends PImage {
     return this; 
   }
 
-  PImage redChannelShift(int amount) {
-    ChannelShift cs = new ChannelShift(this.img, 0, 0, 0, amount);
-    this.pg.beginDraw();
-    this.pg.image(cs.display(), 0, 0);
-    this.pg.endDraw();
-    this.img = this.pg;
-    return this;
-  }
-  PImage redChannelVShift(int amount) {
-    ChannelShift cs = new ChannelShift(this.img, 0, 0, amount, 0);
+  PImage redChannelShift(int vamount, int hamount) {
+    ChannelShift cs = new ChannelShift(this.img, 0, 0, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
@@ -249,16 +245,8 @@ class Glitcher extends PImage {
     return this;
   }
 
-  PImage greenChannelShift(int amount) {
-    ChannelShift cs = new ChannelShift(this.img, 1, 1, 0, amount);
-    this.pg.beginDraw();
-    this.pg.image(cs.display(), 0, 0);
-    this.pg.endDraw();
-    this.img = this.pg;
-    return this;
-  }
-  PImage greenChannelVShift(int amount) {
-    ChannelShift cs = new ChannelShift(this.img, 1, 1, amount, 0);
+  PImage greenChannelShift(int vamount, int hamount) {
+    ChannelShift cs = new ChannelShift(this.img, 1, 1, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
@@ -266,16 +254,8 @@ class Glitcher extends PImage {
     return this;
   }
 
-  PImage blueChannelShift(int amount) {
-    ChannelShift cs = new ChannelShift(this.img, 2, 2, 0, amount);
-    this.pg.beginDraw();
-    this.pg.image(cs.display(), 0, 0);
-    this.pg.endDraw();
-    this.img = this.pg;
-    return this;
-  }
-  PImage blueChannelVShift(int amount) {
-    ChannelShift cs = new ChannelShift(this.img, 2, 2, amount, 0);
+  PImage blueChannelShift(int vamount, int hamount) {
+    ChannelShift cs = new ChannelShift(this.img, 2, 2, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
