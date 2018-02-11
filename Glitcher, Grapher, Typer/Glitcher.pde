@@ -198,6 +198,14 @@ class Glitcher extends PImage {
     return this;
   }
   
+  PImage offset(int randAmount) {
+    int randX = int(random(this.img.width));
+    int randY = int(random(this.img.height));
+    int randW = int(random(this.img.width/8));
+    int randH = int(random(this.img.width/8));
+    return this.offset(randX, randY, randW, randH, int(random(1, randAmount)));
+  }
+
   PImage offset(int x, int y, int w, int h, int randAmount) {
     PGraphics pgg = createGraphics(this.img.width, this.img.height);
     pgg.beginDraw();

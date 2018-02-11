@@ -10,6 +10,7 @@ Grapher graph;
 void setup()
 {
   size(900, 600);
+  background(0);
   // load some images
   img1 = loadImage("data/plumbers.jpg");
 
@@ -19,7 +20,7 @@ void setup()
   color cc = color(255, 255, 255);
   graph.halftone(5, cc);
 
-  image(img1, 0, 0);
+  // image(img1, 0, 0);
   image(graph, 0, 0);
 }
 
