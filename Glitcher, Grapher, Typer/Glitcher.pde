@@ -210,8 +210,11 @@ class Glitcher extends PImage {
     PGraphics pgg = createGraphics(this.img.width, this.img.height);
     pgg.beginDraw();
     pgg.image(this.img, 0, 0);
-    int rAmount = int(random(-randAmount, randAmount));
-    pgg.copy(this.imgImmutable,x,y,w,h,x+rAmount,y+rAmount,w,h);
+    float a = random(360);
+    float rAmount = random(randAmount);
+    int newX = int(x + rAmount * cos(a));
+    int newY = int(y + rAmount * sin(a));
+    pgg.copy(this.imgImmutable,x,y,w,h,newX,newY,w,h);
     this.img = pgg.copy();
     pgg.endDraw();
     
