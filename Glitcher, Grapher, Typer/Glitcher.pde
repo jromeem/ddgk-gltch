@@ -161,6 +161,10 @@ class Glitcher extends PImage {
   PImage _sectional(int xOffset, int yOffset, int w, int h, int pixelAmount) {
     this.pg.beginDraw();
     this.pg.image(this.img, 0, 0);
+    if (pixelAmount < 1) {
+      this.img = this.pg.copy();
+      return this;
+    }
     this.pg.loadPixels();
 
     PGraphics pgg = createGraphics(w, h);
