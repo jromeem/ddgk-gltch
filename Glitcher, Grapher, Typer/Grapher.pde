@@ -71,13 +71,33 @@ class Grapher extends PImage {
         this.pg.ellipse(xLoc, yLoc, ellispeSize, ellispeSize);
       }
     }
-
     this.pg.endDraw();
     imgpg.endDraw();
-
     return this;
   }
 
+  Grapher halftone(float stepSize) {
+    PGraphics imgpg = createGraphics(this.img.width, this.img.height);
+    imgpg.beginDraw();
+    imgpg.image(this.img, 0, 0);
+    imgpg.loadPixels();
+    this.pg.beginDraw();
+    this.pg.noStroke();
+    float offset = stepSize;
+    for (int i = 0; i < this.img.width*this.img.height; i+=this.img.width*(offset*1.5)) {
+      for (int j = 0; j < this.img.width; j+=offset) {
+        float brightVal = brightness(imgpg.pixels[i+j]);
+        float ellispeSize = stepSize;
+        float xLoc = (i+j) % this.img.width;
+        float yLoc = i / this.img.width;
+        this.pg.fill(red(imgpg.pixels[i+j]), green(imgpg.pixels[i+j]), blue(imgpg.pixels[i+j]));
+        this.pg.ellipse(xLoc, yLoc, ellispeSize, ellispeSize);
+      }
+    }
+    this.pg.endDraw();
+    imgpg.endDraw();
+    return this;
+  }
 }
 
 // overloading image() methods
