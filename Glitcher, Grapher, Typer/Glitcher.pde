@@ -158,23 +158,44 @@ class Glitcher extends PImage {
    return this.pixelate(int(xOffset), int(yOffset), int(w), int(h), int(pixelAmount)); 
   }
   
-  PImage pixelate(int xOffset, int yOffset, int w, int h, int pixelAmount) {
+  PImage _sectional(int xOffset, int yOffset, int w, int h, int pixelAmount) {
     this.pg.beginDraw();
     this.pg.image(this.img, 0, 0);
-    if (pixelAmount <= 0) {
-      this.img = this.pg.copy();
-      return this;
+    this.pg.loadPixels();
+
+    PGraphics pgg = createGraphics(w, h);
+    pgg.beginDraw();
+    pgg.loadPixels();
+    int pggPixelCount = 0;
+    int startingPixel = xOffset + yOffset*this.img.width;
+    int endingPixel = (xOffset+w) + ((yOffset+h)*this.img.width);
+    for (int i = startingPixel; i < endingPixel && pggPixelCount < w*h-1; i+=this.img.width) {
+      for (int p = 0; p < w && pggPixelCount < w*h-1; p++) {
+        pgg.pixels[pggPixelCount++] = this.pg.pixels[i+p];
+      }
     }
-    this.pg.loadPixels();    
-    for (int j = 0; j < this.img.width*h; j+=this.img.width*pixelAmount) {
+    pgg.updatePixels();
+    pgg.endDraw();
+
+    return pgg;
+  }
+
+  PImage pixelate(int xOffset, int yOffset, int w, int h, int pixelAmount) {
+    PImage croppedImage = this._sectional(xOffset, yOffset, w, h, pixelAmount);
+
+    PGraphics pgg = createGraphics(w, h);
+    pgg.beginDraw();
+    pgg.image(croppedImage, 0, 0);
+    pgg.loadPixels();
+    for (int j = 0; j < croppedImage.width*h; j+=croppedImage.width*pixelAmount) {
       for (int i = 0; i < w; i+=pixelAmount) {
         // find pixel average
         int collectionTotal = int(pixelAmount*pixelAmount);
         float totalR, totalG, totalB;
         totalR = totalG = totalB = 0;
-        for (int m = 0; m < pixelAmount*this.img.width; m+=this.img.width) {
+        for (int m = 0; m < pixelAmount*croppedImage.width; m+=croppedImage.width) {
           for (int p = 0; p < pixelAmount; p++) {
-            color c = this.pg.pixels[min(p+m + i+j, this.pg.pixels.length-1)];
+            color c = pgg.pixels[min(p+m + i+j, pgg.pixels.length-1)];
             totalR += red(c);
             totalG += green(c);
             totalB += blue(c);
@@ -184,19 +205,26 @@ class Glitcher extends PImage {
         float thisG = totalG / collectionTotal;
         float thisB = totalB / collectionTotal;
         color newColor = color(thisR, thisG, thisB);
-        this.pg.fill(newColor);
-        this.pg.noStroke();
+        pgg.fill(newColor);
+        pgg.noStroke();
         
         // draw new pixel rect
-        int px = (i+j)%this.img.width + xOffset;
-        int py = j/this.img.width + yOffset;
-        this.pg.rect(px, py, pixelAmount, pixelAmount);
+        int px = (i+j)%croppedImage.width;
+        int py = j/croppedImage.width;
+        pgg.rect(px, py, pixelAmount, pixelAmount);
       }
     }
+    pgg.endDraw();
+
+    this.pg.beginDraw();
+    this.pg.image(this.img, 0, 0);
+    this.pg.image(pgg, xOffset, yOffset);
     this.img = this.pg.copy();
     this.pg.endDraw();
+
     return this;
   }
+
   
   PImage offset(int randAmount) {
     int randX = int(random(this.img.width));
