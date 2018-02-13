@@ -171,7 +171,7 @@ class Glitcher extends PImage {
     int endingPixel = (xOffset+w) + ((yOffset+h)*this.img.width);
     for (int i = startingPixel; i < endingPixel && pggPixelCount < w*h-1; i+=this.img.width) {
       for (int p = 0; p < w && pggPixelCount < w*h-1; p++) {
-        pgg.pixels[pggPixelCount++] = this.pg.pixels[i+p];
+        pgg.pixels[pggPixelCount++] = this.pg.pixels[min(i+p,this.pg.pixels.length-1)];
       }
     }
     pgg.updatePixels();
