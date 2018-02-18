@@ -271,7 +271,7 @@ class Glitcher extends PImage {
   }
   
   PImage pixelSort(int mode, float threshold) {
-    PixelSort p = new PixelSort(this.imgImmutable, mode, threshold, true, true);
+    PixelSort p = new PixelSort(this.img, mode, threshold, true, true);
     this.pg.beginDraw();
     this.pg.image(p.ps_draw(), 0, 0);
     this.pg.endDraw();
@@ -280,7 +280,7 @@ class Glitcher extends PImage {
   }
 
   PImage hpixelSort(int mode, float threshold) {
-    PixelSort p = new PixelSort(this.imgImmutable, mode, threshold, true, false);
+    PixelSort p = new PixelSort(this.img, mode, threshold, true, false);
     this.pg.beginDraw();
     this.pg.image(p.ps_draw(), 0, 0);
     this.pg.endDraw();
@@ -289,7 +289,7 @@ class Glitcher extends PImage {
   }
 
   PImage vpixelSort(int mode, float threshold) {
-    PixelSort p = new PixelSort(this.imgImmutable, mode, threshold, false, true);
+    PixelSort p = new PixelSort(this.img, mode, threshold, false, true);
     this.pg.beginDraw();
     this.pg.image(p.ps_draw(), 0, 0);
     this.pg.endDraw();
@@ -298,7 +298,7 @@ class Glitcher extends PImage {
   }
 
   PImage redChannelShift(int vamount, int hamount) {
-    ChannelShift cs = new ChannelShift(this.imgImmutable, 0, 0, vamount, hamount);
+    ChannelShift cs = new ChannelShift(this.img, 0, 0, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
@@ -307,7 +307,7 @@ class Glitcher extends PImage {
   }
 
   PImage greenChannelShift(int vamount, int hamount) {
-    ChannelShift cs = new ChannelShift(this.imgImmutable, 1, 1, vamount, hamount);
+    ChannelShift cs = new ChannelShift(this.img, 1, 1, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
@@ -316,7 +316,7 @@ class Glitcher extends PImage {
   }
 
   PImage blueChannelShift(int vamount, int hamount) {
-    ChannelShift cs = new ChannelShift(this.imgImmutable, 2, 2, vamount, hamount);
+    ChannelShift cs = new ChannelShift(this.img, 2, 2, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
