@@ -36,8 +36,21 @@ void draw() {
   glitch = new Glitcher(img);
 
   // make a new pixel sort glitch based on the mouseX positions
-  glitch.pixelSort(2, threshold);
-  
+
+  // differernt pixel sort options (use one at a time-- uses a lot of processing power!!!)
+
+  glitch.hpixelSort(0, threshold);
+  // glitch.hpixelSort(1, threshold);
+  // glitch.hpixelSort(2, threshold);
+
+  // glitch.vpixelSort(0, threshold);
+  // glitch.vpixelSort(1, threshold);
+  // glitch.vpixelSort(2, threshold);
+
+  // glitch.pixelSort(0, threshold);
+  // glitch.pixelSort(1, threshold);
+  // glitch.pixelSort(2, threshold);
+
   // display the glitch
   image(glitch, 0, 0);
 }

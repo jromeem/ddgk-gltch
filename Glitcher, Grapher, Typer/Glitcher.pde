@@ -271,12 +271,30 @@ class Glitcher extends PImage {
   }
   
   PImage pixelSort(int mode, float threshold) {
-    PixelSort p = new PixelSort(this.img, mode, threshold);
+    PixelSort p = new PixelSort(this.img, mode, threshold, true, true);
     this.pg.beginDraw();
     this.pg.image(p.ps_draw(), 0, 0);
     this.pg.endDraw();
     this.img = this.pg;
-    return this; 
+    return this;
+  }
+
+  PImage hpixelSort(int mode, float threshold) {
+    PixelSort p = new PixelSort(this.img, mode, threshold, true, false);
+    this.pg.beginDraw();
+    this.pg.image(p.ps_draw(), 0, 0);
+    this.pg.endDraw();
+    this.img = this.pg;
+    return this;
+  }
+
+  PImage vpixelSort(int mode, float threshold) {
+    PixelSort p = new PixelSort(this.img, mode, threshold, false, true);
+    this.pg.beginDraw();
+    this.pg.image(p.ps_draw(), 0, 0);
+    this.pg.endDraw();
+    this.img = this.pg;
+    return this;
   }
 
   PImage redChannelShift(int vamount, int hamount) {
@@ -467,9 +485,9 @@ class PixelSort {
   int loops = 1;
 
   // threshold values to determine sorting start and end pixels
-  float blackValue = -16000000;
-  float brightnessValue = 60;
-  float whiteValue = -13000000;
+  float blackValue = -17000000;
+  float brightnessValue = 200;
+  float whiteValue = -26000000;
 
   int row = 0;
   int column = 0;
@@ -478,14 +496,50 @@ class PixelSort {
   boolean columnDone = false;
   boolean rowDone = false;
 
+  boolean isHorizontal = true;
+  boolean isVertical = true;
+
   PImage _img;
   PGraphics pgg;
   PImage imgImmutable;
 
-  PixelSort(PImage psImg, int mode, float thresholdValue) {
+  PixelSort(PImage psImg, int mode, float thresholdValue, boolean horiSort, boolean vertSort) {
     this._img = psImg;
     this.mode = mode;
+
+    this.isHorizontal = horiSort;
+    this.isVertical = vertSort;
     
+    // map the values based on the mode
+    if (this.mode == 0) {
+      this.thresholdValue = map(thresholdValue, 0, 1000, 0, blackValue);
+    } else if (this.mode == 1) {
+      this.thresholdValue = map(thresholdValue, 0, 1000, brightnessValue, 0);
+    } else if (this.mode == 2) {
+      this.thresholdValue = map(thresholdValue, 0, 1000, whiteValue, 0);
+    } else {
+      this.mode = 0;
+      this.thresholdValue = 1000;
+    }
+
+    // set the values to the threshold value
+    this.blackValue = this.thresholdValue;
+    this.brightnessValue = this.thresholdValue;
+    this.whiteValue = this.thresholdValue;
+
+    this.pgg = createGraphics(_img.width, _img.height);
+    // make a immutable copy
+    PGraphics pg2 = createGraphics(this._img.width, this._img.height);
+    pg2.beginDraw();
+    pg2.image(this._img, 0, 0);
+    this.imgImmutable = pg2.copy();
+    pg2.endDraw();
+  }
+
+  PixelSort(PImage psImg, int mode, float thresholdValue, boolean isHorizontal) {
+    this._img = psImg;
+    this.mode = mode;
+
     // map the values based on the mode
     if (this.mode == 0) {
       this.thresholdValue = map(thresholdValue, 0, 1000, 0, -16000000);
@@ -515,19 +569,27 @@ class PixelSort {
   PGraphics ps_draw() {
     // loop through columns
     pgg.beginDraw();
-    while(column < _img.width-1) {
-      _img.loadPixels(); 
-      sortColumn();
-      column++;
-      _img.updatePixels();
+
+    // sort veritcally
+    if (this.isVertical) {
+      while(column < _img.width-1) {
+        _img.loadPixels();
+        sortColumn();
+        column++;
+        _img.updatePixels();
+      }
     }
-    // loop through rows
-    while(row < _img.height-1) {
-      _img.loadPixels(); 
-      sortRow();
-      row++;
-      _img.updatePixels();
+
+    // sort horizontally
+    if (this.isHorizontal) {
+      while(row < _img.height-1) {
+        _img.loadPixels();
+        sortRow();
+        row++;
+        _img.updatePixels();
+      }
     }
+
     // load updated image onto surface and scale to fit the display width,height
     pgg.image(_img, 0, 0, width, height);
     if (column >= _img.width-1) {
