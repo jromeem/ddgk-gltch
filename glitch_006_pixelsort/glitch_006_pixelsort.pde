@@ -18,10 +18,7 @@ PImage img;
 
 void setup() {
   img = loadImage("data/tokyo.png");
-  // use only numbers (not variables) for the size() command, Processing 3
   size(900, 600);
-  // create a new Glitcher
-  glitch = new Glitcher(img);
 }
 
 void draw() {
