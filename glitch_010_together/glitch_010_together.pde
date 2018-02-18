@@ -6,6 +6,7 @@ PFont font;
 // glitchers and graphers
 Glitcher glitch;
 Grapher graph;
+Typer tt;
 
 // a random string of characters
 String randomCharacters = "{}|[]/:<>?.,);'~(*&^%$#@!-=_+12340!@#$";
@@ -27,8 +28,7 @@ void setup()
   
   // load an image and a font
   img = loadImage("data/portrait.jpg");
-  font = createFont("Monaco", 22);
-  textFont(font);
+  tt = new Typer("Monaco", 22);
   
   // start a glitcher
   glitch = new Glitcher(img);
@@ -87,7 +87,7 @@ void draw()
   
   // set the alignment and display the text
   textAlign(CENTER, BOTTOM);
-  text(date, 0, 0, width, height*7/8);
+  tt.typeText(date, 0, 0, width, height*7/8);
   
   // create random letters drawn from the randomCharacters string
   char randomLetter = randomCharacters.charAt(int(random(randomCharacters.length()-1)));
@@ -101,7 +101,7 @@ void draw()
   textAlign(CORNER, CORNER);
   
   // display three different texts in three different positions
-  text("h"+randomLetter+"llo w"+randomLetter2+"rld", posx1, posy1);
-  text("he"+randomLetter3+"lo worl"+randomLetter4, posx2, posy2);
-  text(randomLetter5+"ello wor"+randomLetter6+"d", posx3, posy3);
+  tt.typeText("h"+randomLetter+"llo w"+randomLetter2+"rld", posx1, posy1);
+  tt.typeText("he"+randomLetter3+"lo worl"+randomLetter4, posx2, posy2);
+  tt.typeText(randomLetter5+"ello wor"+randomLetter6+"d", posx3, posy3);
 }
