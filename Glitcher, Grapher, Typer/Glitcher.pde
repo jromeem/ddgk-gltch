@@ -160,7 +160,7 @@ class Glitcher extends PImage {
   
   PImage _sectional(int xOffset, int yOffset, int w, int h, int pixelAmount) {
     this.pg.beginDraw();
-    this.pg.image(this.imgImmutable, 0, 0);
+    this.pg.image(this.img, 0, 0);
     if (pixelAmount < 1) {
       this.img = this.pg.copy();
       return this;
@@ -223,9 +223,9 @@ class Glitcher extends PImage {
     this.pg.beginDraw();
     this.pg.image(this.img, 0, 0);
     this.pg.image(pgg, xOffset, yOffset);
-    this.img = this.pg.copy();
     this.pg.endDraw();
 
+    this.img = this.pg.copy();
     return this;
   }
 
@@ -271,56 +271,56 @@ class Glitcher extends PImage {
   }
   
   PImage pixelSort(int mode, float threshold) {
-    PixelSort p = new PixelSort(this.imgImmutable, mode, threshold, true, true);
+    PixelSort p = new PixelSort(this.img, mode, threshold, true, true);
     this.pg.beginDraw();
     this.pg.image(p.ps_draw(), 0, 0);
     this.pg.endDraw();
-    this.img = this.pg;
+    this.img = this.pg.copy();
     return this;
   }
 
   PImage hpixelSort(int mode, float threshold) {
-    PixelSort p = new PixelSort(this.imgImmutable, mode, threshold, true, false);
+    PixelSort p = new PixelSort(this.img, mode, threshold, true, false);
     this.pg.beginDraw();
     this.pg.image(p.ps_draw(), 0, 0);
     this.pg.endDraw();
-    this.img = this.pg;
+    this.img = this.pg.copy();
     return this;
   }
 
   PImage vpixelSort(int mode, float threshold) {
-    PixelSort p = new PixelSort(this.imgImmutable, mode, threshold, false, true);
+    PixelSort p = new PixelSort(this.img, mode, threshold, false, true);
     this.pg.beginDraw();
     this.pg.image(p.ps_draw(), 0, 0);
     this.pg.endDraw();
-    this.img = this.pg;
+    this.img = this.pg.copy();
     return this;
   }
 
   PImage redChannelShift(int vamount, int hamount) {
-    ChannelShift cs = new ChannelShift(this.imgImmutable, 0, 0, vamount, hamount);
+    ChannelShift cs = new ChannelShift(this.img, 0, 0, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
-    this.img = this.pg;
+    this.img = this.pg.copy();
     return this;
   }
 
   PImage greenChannelShift(int vamount, int hamount) {
-    ChannelShift cs = new ChannelShift(this.imgImmutable, 1, 1, vamount, hamount);
+    ChannelShift cs = new ChannelShift(this.img, 1, 1, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
-    this.img = this.pg;
+    this.img = this.pg.copy();
     return this;
   }
 
   PImage blueChannelShift(int vamount, int hamount) {
-    ChannelShift cs = new ChannelShift(this.imgImmutable, 2, 2, vamount, hamount);
+    ChannelShift cs = new ChannelShift(this.img, 2, 2, vamount, hamount);
     this.pg.beginDraw();
     this.pg.image(cs.display(), 0, 0);
     this.pg.endDraw();
-    this.img = this.pg;
+    this.img = this.pg.copy();
     return this;
   }
 }
